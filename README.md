@@ -9,7 +9,9 @@ Corresponding author: Xin Xing (xin.xing@uky.edu)
 
 We address the task of multi-label image classification, which is essentially single-label image classification without the constraint that there is a single class present in the image. This task is similar to object detection, without the need to localize or count individual objects. Unfortunately, much like object detection, obtaining high-quality multi-label annotations is time-consuming and error-prone. To address this challenge, we consider the single-positive label setting, in which only a single positive class is annotated, even when multiple classes are present in a given image. The current state-of-the-art (SOTA) methods for this setting mainly propose novel loss functions to improve model performance. Several works have attempted to use pseudo-labels, but these approaches haven’t worked well. We propose a novel model called Vision-Language Pseudo-Labeling (VLPL) which uses a vision-language model to suggest strong positive and negative pseudo-labels. We demonstrate the effectiveness of the proposed VLPL model on four popular benchmarks: Pascal VOC, MS-COCO, NUS-WIDE, and CUB-Birds datasets. The results of VLPL outperform several strong baselines and indicate the effectiveness of the proposed approach. Furthermore, we explore the backbone architecture and outperform the SOTA method by 5.4% on Pascal VOC, 15.6% on MS-COCO, 15.2% on NUS-WIDE, and 11.3% on CUB-Birds.
 
-![](https://github.com/mvrl/VLPL/blob/main/images/VLPL_Architecture.pdf)
+<div align="center">
+<img src="images/VLPL_Architecture.pdf" title="overview" width="80%">
+</div>
 
 ## 🛠️ Installation
 1. Create a Conda environment for the code:
