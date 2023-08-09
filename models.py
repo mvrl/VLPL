@@ -318,6 +318,10 @@ class MultilabelModel(torch.nn.Module):
     def forward(self, batch):
         f_logits = self.f(batch['image'])
         return f_logits
+
+    
+    
+    
     
 #Baseline Model
 class ImageClassifier_baseline(torch.nn.Module):
@@ -405,3 +409,4 @@ class MultilabelModel_baseline(torch.nn.Module):
     def forward(self, batch):
         f_logits = self.f(batch['image'])
         return f_logits
+
