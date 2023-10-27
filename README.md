@@ -1,7 +1,7 @@
 # VLPL: Vision Language Pseudo Label for Multi-label Learning with Single Positive Labels
 This is the official Pytorch implementation paper "VLPL: Vision Language Pseudo Label for Multi-label Learning with Single Positive Labels".
 
-Authors: Xin Xing, Zhexiao Xiong, Abby Stylianou, Liyu Gong, and Nathan Jacobs
+Authors: Xin Xing, Zhexiao Xiong, Abby Stylianou, SrikumarSastry, Liyu Gong, and Nathan Jacobs
 
 Corresponding author: Xin Xing (xin.xing@uky.edu)
 
