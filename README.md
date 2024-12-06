@@ -3,7 +3,7 @@ This is the official Pytorch implementation paper "VLPL: Vision Language Pseudo 
 
 Authors: Xin Xing, Zhexiao Xiong, Abby Stylianou, SrikumarSastry, Liyu Gong, and Nathan Jacobs
 
-Corresponding author: Xin Xing (xin.xing@uky.edu)
+Corresponding author: Xin Xing (xxing@unomaha.edu)
 
 ### Abstract
 
