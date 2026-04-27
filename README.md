@@ -162,14 +162,31 @@ VLPL/
 
 ---
 
+## Results
+
+Main results on the single-positive label setting (1 P. & 0 N.), measured by mAP. Input image size: 448×448.
+
+| Method | VOC | COCO | NUS | CUB |
+|---|---|---|---|---|
+| AN Loss | 85.89 | 64.92 | 42.27 | 18.31 |
+| EM | 89.09 | 70.70 | 47.15 | 20.85 |
+| EM+APL | 89.19 | 70.87 | 47.59 | 21.84 |
+| LL-R | **89.2** | 71.0 | 47.4 | 19.5 |
+| DualCoOp | 83.6 | 69.2 | 42.8 | — |
+| **VLPL (Ours)** | 89.10 | **71.45** | **49.55** | **24.02** |
+
+See the paper for the full comparison table including all baselines.
+
+---
+
 ## Citation
 
 ```bibtex
-@article{xing2023vlpl,
+@inproceedings{xing2024vlpl,
   title={VLPL: Vision Language Pseudo Labels for Multi-label Learning with Single Positive Labels},
   author={Xing, Xin and Xiong, Zhexiao and Stylianou, Abby and Sastry, Srikumar and Gong, Liyu and Jacobs, Nathan},
-  journal={TODO},
-  year={TODO}
+  booktitle={CVPR 2024 Workshop on Learning with Limited Labelled Data (LIMIT)},
+  year={2024}
 }
 ```
 
@@ -183,6 +200,4 @@ This codebase builds on [single-positive-multi-label](https://github.com/elijahc
 
 ## TODO
 
-- [ ] Add paper venue and year to BibTeX entry
-- [ ] Add quantitative results table
 - [ ] Add pretrained model checkpoints
