@@ -1,127 +1,203 @@
-# VLPL: Vision Language Pseudo Label for Multi-label Learning with Single Positive Labels
-This is the official Pytorch implementation paper "VLPL: Vision Language Pseudo Label for Multi-label Learning with Single Positive Labels".
+# VLPL: Vision Language Pseudo Labels for Multi-label Learning with Single Positive Labels
 
-Authors: Xin Xing, Zhexiao Xiong, Abby Stylianou, SrikumarSastry, Liyu Gong, and Nathan Jacobs
+Official PyTorch implementation of **VLPL**, a vision-language pseudo-labeling approach for multi-label image classification under the single-positive label setting.
 
-Corresponding author: Xin Xing (xxing@unomaha.edu)
-
-### Abstract
-
-We address the task of multi-label image classification, which is essentially single-label image classification without the constraint that there is a single class present in the image. This task is similar to object detection, without the need to localize or count individual objects. Unfortunately, much like object detection, obtaining high-quality multi-label annotations is time-consuming and error-prone. To address this challenge, we consider the single-positive label setting, in which only a single positive class is annotated, even when multiple classes are present in a given image. The current state-of-the-art (SOTA) methods for this setting mainly propose novel loss functions to improve model performance. Several works have attempted to use pseudo-labels, but these approaches haven’t worked well. We propose a novel model called Vision-Language Pseudo-Labeling (VLPL) which uses a vision-language model to suggest strong positive and negative pseudo-labels. We demonstrate the effectiveness of the proposed VLPL model on four popular benchmarks: Pascal VOC, MS-COCO, NUS-WIDE, and CUB-Birds datasets. The results of VLPL outperform several strong baselines and indicate the effectiveness of the proposed approach. Furthermore, we explore the backbone architecture and outperform the SOTA method by 5.4% on Pascal VOC, 15.6% on MS-COCO, 15.2% on NUS-WIDE, and 11.3% on CUB-Birds.
+**Authors:** Xin Xing, Zhexiao Xiong, Abby Stylianou, Srikumar Sastry, Liyu Gong, and Nathan Jacobs  
+**Corresponding author:** Xin Xing (xxing@unomaha.edu)
 
 <div align="center">
 <img src="images/VLPL.png" title="VLPL" width="80%">
 </div>
 
-## 🛠️ Installation
-1. Create a Conda environment for the code:
-```
-conda create --name SPML python=3.8.8
-```
-2. Activate the environment:
-```
-conda activate SPML
-```
-3. Install the dependencies:
-```
+---
+
+## Overview
+
+Multi-label image classification requires annotating all classes present in an image, which is expensive and error-prone. The **single-positive label** setting reduces this cost by annotating only one positive class per image, even when multiple classes are present. Existing methods for this setting rely primarily on novel loss functions; pseudo-label approaches have historically underperformed.
+
+**VLPL** uses a pretrained vision-language model (CLIP) to generate strong positive and negative pseudo-labels, supplementing the sparse single-positive supervision signal.
+
+**Key contributions:**
+- Vision-language pseudo-labeling strategy that proposes reliable positive and negative pseudo-labels from CLIP similarity scores
+- Demonstrated on four benchmarks: Pascal VOC, MS-COCO, NUS-WIDE, and CUB-Birds
+- Outperforms prior SOTA by **+5.4%** (VOC), **+15.6%** (COCO), **+15.2%** (NUS-WIDE), and **+11.3%** (CUB) when using a stronger backbone
+
+---
+
+## Installation
+
+Requires Python 3.8 and a CUDA-capable GPU.
+
+```bash
+conda create --name vlpl python=3.8.8
+conda activate vlpl
 pip install -r requirements.txt
 ```
 
-## 📖 Preparing Datasets
-### Downloading Data
-#### PASCAL VOC
+---
 
-1. Run the following commands:
+## Data
 
-```
-cd {PATH-TO-THIS-CODE}/data/pascal
+### 1. Download raw data
+
+**PASCAL VOC**
+```bash
+cd data/pascal
 curl http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar --output pascal_raw.tar
 tar -xf pascal_raw.tar
 rm pascal_raw.tar
 ```
 
-#### MS-COCO
-
-1. Run the following commands:
-
-```
-cd {PATH-TO-THIS-CODE}/data/coco
+**MS-COCO**
+```bash
+cd data/coco
 curl http://images.cocodataset.org/annotations/annotations_trainval2014.zip --output coco_annotations.zip
 curl http://images.cocodataset.org/zips/train2014.zip --output coco_train_raw.zip
 curl http://images.cocodataset.org/zips/val2014.zip --output coco_val_raw.zip
 unzip -q coco_annotations.zip
 unzip -q coco_train_raw.zip
 unzip -q coco_val_raw.zip
-rm coco_annotations.zip
-rm coco_train_raw.zip
-rm coco_val_raw.zip
+rm coco_annotations.zip coco_train_raw.zip coco_val_raw.zip
 ```
 
-#### NUS-WIDE
-
-1.  Follow the instructions in [this website](https://lms.comp.nus.edu.sg/wp-content/uploads/2019/research/nuswide/NUS-WIDE.html) to download the raw images of NUS-WIDE named `Flickr.zip`.
-2.  Run the following commands:
-```
-mv {PATH-TO-DOWNLOAD-FILES}/Flickr.zip {PATH-TO-THIS-CODE}/data/nuswide
-unzip -q Flickr.zip
-rm Flickr.zip
+**NUS-WIDE**
+1. Download `Flickr.zip` from the [NUS-WIDE website](https://lms.comp.nus.edu.sg/wp-content/uploads/2019/research/nuswide/NUS-WIDE.html).
+2. Move and extract:
+```bash
+mv /path/to/Flickr.zip data/nuswide/
+cd data/nuswide && unzip -q Flickr.zip && rm Flickr.zip
 ```
 
-#### CUB
-
-1.  Download `CUB_200_2011.tgz` in [this website](https://data.caltech.edu/records/20098).
-2.  Run the following commands:
-```
-mv {PATH-TO-DOWNLOAD-FILES}/CUB_200_2011.tgz {PATH-TO-THIS-CODE}/data/cub
-tar -xf CUB_200_2011.tgz
-rm CUB_200_2011.tgz
+**CUB-Birds**
+1. Download `CUB_200_2011.tgz` from [Caltech](https://data.caltech.edu/records/20098).
+2. Move and extract:
+```bash
+mv /path/to/CUB_200_2011.tgz data/cub/
+cd data/cub && tar -xf CUB_200_2011.tgz && rm CUB_200_2011.tgz
 ```
 
-### Formatting Data
-For PASCAL VOC, MS-COCO, and CUB, use Python code to format data:
-```
-cd {PATH-TO-THIS-CODE}
+### 2. Format data
+
+For PASCAL VOC, MS-COCO, and CUB, run from the repository root:
+```bash
 python preproc/format_pascal.py
 python preproc/format_coco.py
 python preproc/format_cub.py
 ```
-For NUS-WIDE, please download the formatted files [here](https://drive.google.com/drive/folders/1YL7WhnGpd-pjbtPL5r6IKiPeYFVdpYne?usp=sharing) and move them to the corresponding path:
-```
-mv {PATH-TO-DOWNLOAD-FILES}/{DOWNLOAD-FILES} {PATH-TO-THIS-CODE}/data/nuswide
-```
-`{DOWNLOAD-FILES}` should be replaced by `formatted_train_images.npy`, `formatted_train_labels.npy`, `formatted_val_images.npy`, or `formatted_train_labels.npy`.
 
+For NUS-WIDE, download the pre-formatted files from [Google Drive](https://drive.google.com/drive/folders/1YL7WhnGpd-pjbtPL5r6IKiPeYFVdpYne?usp=sharing) and place them in `data/nuswide/`:
+- `formatted_train_images.npy`
+- `formatted_train_labels.npy`
+- `formatted_val_images.npy`
+- `formatted_val_labels.npy`
 
-### Generating Single Positive Annotations
-In the last step, run `generate_observed_labels.py` to yield single positive annotations from full annotations of each dataset:
-```
-python preproc/generate_observed_labels.py --dataset {DATASET}
-```
-`{DATASET}` should be replaced by `pascal`, `coco`, `nuswide`, or `cub`.
+### 3. Generate single-positive annotations
 
-## 🦍 Training and Evaluation
-Run `main.py` to train and evaluate a model:
+```bash
+python preproc/generate_observed_labels.py --dataset <DATASET>
 ```
-python main.py -d {DATASET} -l {LOSS} -g {GPU} -m {model} -t {tempurature} -th {threshold}  -p {partical} -s {PYTORCH-SEED}
-```
-Command-line arguments are as follows:
-1. `{DATASET}`: The adopted dataset. (*default*: `pascal` | *available*: `pascal`, `coco`, `nuswide`, or `cub`)
-2. `{LOSS}`: The method used for training. (*default*: `EM_PL` | *available*: `bce`, `iun`, `an`, `EM`, `EM_APL`, or `EM_PL`)
-3. `{GPU}`: The GPU index. (*default*: `0`)
-4. `{PYTORCH-SEED}`: The seed of PyTorch. (*default*: `0`)
-5. `{model}`: The model of backbone. (*default*: `resnet50`| *available*: `resnet50`, `vit_clip`, `convnext_xlarge_22k`, or `convnext_xlarge_1k`)
-6. `{tempurature}`: the temperature scalar of the softmax function.
-7. `{threshold}`: the threshold for the positive pseudo-label. (*default*: `0.3`)
-8. `{partical}`: the percentage of the negative pseudo-label. (*default*: `0.0`)
+`<DATASET>` ∈ {`pascal`, `coco`, `nuswide`, `cub`}
 
-For example, to train and evaluate a model on the PASCAL VOC dataset using  EM loss+ VLPL, please run:
-```
-python main.py -d pascal -l EM_PL 
+---
+
+## Usage
+
+### Training and Evaluation
+
+Run `main_clip.py` to train and evaluate a model:
+
+```bash
+python main_clip.py -d <DATASET> -l <LOSS> -g <GPU> -m <MODEL> -t <TEMP> -th <THRESHOLD> -p <PARTIAL> -s <SEED>
 ```
 
-## Results:
+| Argument | Flag | Default | Options |
+|---|---|---|---|
+| Dataset | `-d` | `pascal` | `pascal`, `coco`, `nuswide`, `cub` |
+| Loss | `-l` | `EM_PL` | `bce`, `iun`, `an`, `EM`, `EM_APL`, `EM_PL` |
+| GPU index | `-g` | `0` | `0`, `1`, `2`, `3` |
+| Backbone | `-m` | `resnet50` | `resnet50`, `clip_vision`, `convnext_xlarge_22k`, `convnext_xlarge_1k` |
+| Temperature | `-t` | `0.01` | float |
+| Pseudo-label threshold | `-th` | `0.3` | float |
+| Negative pseudo-label fraction | `-p` | `0.0` | float |
+| PyTorch seed | `-s` | `0` | int |
 
-## Acknowledgement:
-Many thanks to the authors of [single-positive-multi-label](https://github.com/elijahcole/single-positive-multi-label) and [SPML-AckTheUnknown
-](https://github.com/Correr-Zhou/SPML-AckTheUnknown). Our scripts are highly based on their scripts.
+**Example** – train VLPL with EM_PL loss on PASCAL VOC (default settings):
+```bash
+python main_clip.py -d pascal -l EM_PL
+```
 
+**Example** – train with CLIP vision backbone on MS-COCO:
+```bash
+python main_clip.py -d coco -l EM_PL -m clip_vision
+```
+
+Precomputed CLIP text features for each dataset are provided in the repository root as `.npy` files and are loaded automatically by the training script.
+
+---
+
+## Project Structure
+
+```
+VLPL/
+├── main_clip.py               # Main training and evaluation script
+├── models.py                  # Model definitions (ResNet50, CLIP-ViT, ConvNeXt)
+├── losses.py                  # Loss functions (BCE, AN, EM, EM_PL, EM_APL, ...)
+├── datasets.py                # Dataset loading utilities
+├── metrics.py                 # Evaluation metrics (mAP, etc.)
+├── instrumentation.py         # Training logger
+├── requirements.txt           # Python dependencies
+├── preproc/
+│   ├── format_pascal.py       # Format PASCAL VOC annotations
+│   ├── format_coco.py         # Format MS-COCO annotations
+│   ├── format_cub.py          # Format CUB-Birds annotations
+│   └── generate_observed_labels.py  # Sample single-positive labels
+├── data/
+│   ├── pascal/                # PASCAL VOC data directory
+│   ├── coco/                  # MS-COCO data directory
+│   ├── nuswide/               # NUS-WIDE data directory
+│   └── cub/                   # CUB-Birds data directory
+├── *text_feature.npy          # Precomputed CLIP text features per dataset
+└── images/                    # Architecture figures
+```
+
+---
+
+## Results
+
+Main results on the single-positive label setting (1 P. & 0 N.), measured by mAP. Input image size: 448×448.
+
+| Method | VOC | COCO | NUS | CUB |
+|---|---|---|---|---|
+| AN Loss | 85.89 | 64.92 | 42.27 | 18.31 |
+| EM | 89.09 | 70.70 | 47.15 | 20.85 |
+| EM+APL | 89.19 | 70.87 | 47.59 | 21.84 |
+| LL-R | **89.2** | 71.0 | 47.4 | 19.5 |
+| DualCoOp | 83.6 | 69.2 | 42.8 | — |
+| **VLPL (Ours)** | 89.10 | **71.45** | **49.55** | **24.02** |
+
+See the paper for the full comparison table including all baselines.
+
+---
+
+## Citation
+
+```bibtex
+@inproceedings{xing2024vlpl,
+  title={VLPL: Vision Language Pseudo Labels for Multi-label Learning with Single Positive Labels},
+  author={Xing, Xin and Xiong, Zhexiao and Stylianou, Abby and Sastry, Srikumar and Gong, Liyu and Jacobs, Nathan},
+  booktitle={CVPR 2024 Workshop on Learning with Limited Labelled Data (LIMIT)},
+  year={2024}
+}
+```
+
+---
+
+## Acknowledgments
+
+This codebase builds on [single-positive-multi-label](https://github.com/elijahcole/single-positive-multi-label) and [SPML-AckTheUnknown](https://github.com/Correr-Zhou/SPML-AckTheUnknown).
+
+---
+
+## TODO
+
+- [ ] Add pretrained model checkpoints
