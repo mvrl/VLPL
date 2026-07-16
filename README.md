@@ -1,9 +1,12 @@
 # VLPL: Vision Language Pseudo Labels for Multi-label Learning with Single Positive Labels
 
+[![arXiv](https://img.shields.io/badge/arXiv-2310.15985-b31b1b.svg)](https://arxiv.org/abs/2310.15985)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Official PyTorch implementation of **VLPL**, a vision-language pseudo-labeling approach for multi-label image classification under the single-positive label setting.
 
 **Authors:** Xin Xing, Zhexiao Xiong, Abby Stylianou, Srikumar Sastry, Liyu Gong, and Nathan Jacobs  
-**Corresponding author:** Xin Xing (xxing@unomaha.edu)
+**Corresponding author:** [Xin Xing](https://xinxing99.github.io/) (xxing@unomaha.edu)
 
 <div align="center">
 <img src="images/VLPL.png" title="VLPL" width="80%">
@@ -186,7 +189,10 @@ See the paper for the full comparison table including all baselines.
   title={VLPL: Vision Language Pseudo Labels for Multi-label Learning with Single Positive Labels},
   author={Xing, Xin and Xiong, Zhexiao and Stylianou, Abby and Sastry, Srikumar and Gong, Liyu and Jacobs, Nathan},
   booktitle={CVPR 2024 Workshop on Learning with Limited Labelled Data (LIMIT)},
-  year={2024}
+  year={2024},
+  archivePrefix={arXiv},
+  eprint={2310.15985},
+  primaryClass={cs.CV}
 }
 ```
 
@@ -195,6 +201,12 @@ See the paper for the full comparison table including all baselines.
 ## Acknowledgments
 
 This codebase builds on [single-positive-multi-label](https://github.com/elijahcole/single-positive-multi-label) and [SPML-AckTheUnknown](https://github.com/Correr-Zhou/SPML-AckTheUnknown).
+
+---
+
+## License
+
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
