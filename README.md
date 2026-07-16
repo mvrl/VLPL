@@ -207,9 +207,3 @@ This codebase builds on [single-positive-multi-label](https://github.com/elijahc
 ## License
 
 This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-## TODO
-
-- [ ] Add pretrained model checkpoints
