@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "VLPL: Vision Language Pseudo Labels for Multi-label Learning with Single Positive Labels"
+authors:
+  - family-names: Xing
+    given-names: Xin
+  - family-names: Xiong
+    given-names: Zhexiao
+  - family-names: Stylianou
+    given-names: Abby
+  - family-names: Sastry
+    given-names: Srikumar
+  - family-names: Gong
+    given-names: Liyu
+  - family-names: Jacobs
+    given-names: Nathan
+license: MIT
+identifiers:
+  - type: other
+    value: "arXiv:2310.15985"
+    description: "arXiv preprint"
+preferred-citation:
+  type: conference-paper
+  title: "VLPL: Vision Language Pseudo Labels for Multi-label Learning with Single Positive Labels"
+  authors:
+    - family-names: Xing
+      given-names: Xin
+    - family-names: Xiong
+      given-names: Zhexiao
+    - family-names: Stylianou
+      given-names: Abby
+    - family-names: Sastry
+      given-names: Srikumar
+    - family-names: Gong
+      given-names: Liyu
+    - family-names: Jacobs
+      given-names: Nathan
+  year: 2024
+  collection-title: "CVPR 2024 Workshop on Learning with Limited Labelled Data (LIMIT)"
